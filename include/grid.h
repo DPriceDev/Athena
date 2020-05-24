@@ -6,6 +6,8 @@
 #define ATHENA_GRID_H
 
 #include <array>
+#include <utility>
+#include <algorithm>
 
 namespace AAF {
 
@@ -21,8 +23,17 @@ namespace AAF {
             : mOriginX(originX), mOriginY(originY), mWidth(width), mHeight(height),
               mBounds({ originY + height, originX + width, originY, originX }){
 
-            mGrid.reserve(width*height);
-            std::fill(mGrid.begin(), mGrid.begin() + (width * height), nullptr);
+            mGrid.resize(width*height);
+            std::fill_n(mGrid.begin(), (width * height), nullptr);
+        }
+
+        explicit Grid2D(std::tuple<long, long, long, long> gridParameters)
+                : mOriginX(std::get<2>(gridParameters)), mOriginY(std::get<3>(gridParameters)),
+                  mWidth(std::get<0>(gridParameters)), mHeight(std::get<1>(gridParameters)),
+                  mBounds({ mOriginY + mHeight, mOriginX + mWidth, mOriginY, mOriginX }){
+
+            mGrid.resize(std::get<0>(gridParameters) * std::get<1>(gridParameters));
+            std::fill_n(mGrid.begin(), (mWidth * mHeight), Type());
         }
 
         Type& operator()(long x, long y) {
@@ -40,11 +51,35 @@ namespace AAF {
             }
         }
 
+        Type& at(std::pair<long, long> pair) {
+            return this->at(pair.first, pair.second);
+        }
+
         [[nodiscard]]
         const auto & getBounds() const {
             return mBounds;
         }
 
+        [[nodiscard]]
+        bool isPointInGrid(long x, long y) const {
+            return x >= mOriginX && x < mOriginX + mWidth - 1
+                && y >= mOriginY && y < mOriginY + mHeight - 1;
+        }
+
+        [[nodiscard]]
+        const auto & size() const {
+            return std::make_pair(mWidth, mHeight);
+        }
+
+        [[nodiscard]]
+        const auto & origin() const {
+            return std::make_pair(mOriginX, mOriginY);
+        }
+
+        [[nodiscard]]
+        auto gridParameters() const {
+            return std::make_tuple(mWidth, mHeight, mOriginX, mOriginY);
+        }
     };
 }
 
