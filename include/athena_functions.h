@@ -5,7 +5,7 @@
 #ifndef ATHENA_ATHENA_FUNCTIONS_H
 #define ATHENA_ATHENA_FUNCTIONS_H
 
-namespace AAF {
+namespace ATA {
 
     /**
      * Transform If

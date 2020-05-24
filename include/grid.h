@@ -9,7 +9,7 @@
 #include <utility>
 #include <algorithm>
 
-namespace AAF {
+namespace ATA {
 
     template<class Type>
     class Grid2D {
