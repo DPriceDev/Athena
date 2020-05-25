@@ -25,23 +25,19 @@ namespace ATA {
         /**
          * Methods
          */
-        void setXY(const T nx, const T ny) {
+        void set(const T nx, const T ny) {
             this->x = nx;
             this->y = ny;
         }
 
         [[nodiscard]]
-        T magnitude() const {
+        float magnitude() const {
             return sqrt((x * x) + (y * y));
         }
 
         [[nodiscard]]
-        Vector2 normalised() const {
+        Vector2<float> normalised() const {
             return { this->x/magnitude(), this->y/magnitude() };
-        }
-
-        std::array<T, 2> asArray() {
-            return {x, y};
         }
 
         /**
