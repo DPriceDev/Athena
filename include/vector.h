@@ -51,6 +51,16 @@ namespace ATA {
             return { this->x + other.x, this->y + other.y };
         }
 
+        template<class V>
+        auto operator+(const Vector2<V>& other) const {
+            return Vector2<T> (this->x + other.x, this->y + other.y);
+        }
+
+        template<class V>
+        auto operator-(const Vector2<V>& other) const {
+            return Vector2<T> (this->x - other.x, this->y - other.y);
+        }
+
         Vector2& operator+=(const Vector2& other) {
             this->x += other.x;
             this->y += other.y;

@@ -10,31 +10,31 @@ namespace ATA {
     /**
      * Rect Templated Class
      */
-    template<typename V>
+    template<class Type>
     struct Rect {
-        V mPosition;
-        V mSize;
+        Vector2<Type> mPosition;
+        Vector2<Type> mSize;
 
-        Rect(V position, V size) : mPosition(position), mSize(size) { }
-        Rect() : mPosition(V()), mSize(V()) { }
+        Rect(Vector2<Type> position, Vector2<Type> size) : mPosition(position), mSize(size) { }
+        Rect() : mPosition(Vector2<Type>()), mSize(Vector2<Type>()) { }
 
         [[nodiscard]]
-        V bottomLeft() const {
+        Vector2<Type> bottomLeft() const {
             return mPosition;
         }
 
         [[nodiscard]]
-        V bottomRight() const {
+        Vector2<Type> bottomRight() const {
             return {mPosition.x + mSize.x, mPosition.y};
         }
 
         [[nodiscard]]
-        V topLeft() const {
+        Vector2<Type> topLeft() const {
             return {mPosition.x, mPosition.y + mSize.y};
         }
 
         [[nodiscard]]
-        V topRight() const {
+        Vector2<Type> topRight() const {
             return {mPosition.x + mSize.x, mPosition.y + mSize.y};
         }
 
@@ -52,10 +52,11 @@ namespace ATA {
 
         [[maybe_unused]]
         [[nodiscard]]
-        V midpoint() const {
-            return {mPosition.x + (mSize.x/2), mPosition.y + (mSize.y/2) };
+        Vector2<float> midpoint() const {
+            return Vector2<float>(mPosition.x + (mSize.x/2), mPosition.y + (mSize.y/2) );
         }
 
+        [[nodiscard]]
         float area() const {
             return mSize.x * mSize.y;
         }
