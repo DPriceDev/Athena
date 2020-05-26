@@ -55,6 +55,11 @@ namespace ATA {
             return this->at(pair.first, pair.second);
         }
 
+        template<class Index>
+        Type& at(Vector2<Index> index) {
+            return this->at(index.x, index.y);
+        }
+
         [[nodiscard]]
         const auto & getBounds() const {
             return mBounds;

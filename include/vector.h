@@ -22,6 +22,9 @@ namespace ATA {
         Vector2(T x, T y) : x(x), y(y) { }
         explicit Vector2(T xy) : x(xy), y(xy) { }
 
+        template<class U>
+        explicit Vector2(Vector2<U> vector) : x(vector.x), y(vector.y) { }
+
         /**
          * Methods
          */
