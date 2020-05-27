@@ -30,3 +30,27 @@
 *.exe
 *.out
 *.app
+
+# cmake files
+CMakeCache.txt
+CMakeFiles
+Makefile
+makefile
+cmake_install.cmake
+install_manifest.txt
+*.cmake
+/cmake-build-debug
+
+# vs code files
+.vscode
+.vscode/*
+
+# clangd
+.clangd
+compile_commands.json
+
+# clion
+*.cbp
+/.idea
+.idea/*
+/.idea/
