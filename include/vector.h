@@ -17,13 +17,12 @@ namespace ATA {
     struct Vector2 {
         T x, y;
 
-        /* Constructors */
-        Vector2() : x(0), y(0) { }
-        Vector2(T x, T y) : x(x), y(y) { }
-        explicit Vector2(T xy) : x(xy), y(xy) { }
+        Vector2() : x(0), y(0) {}
+        Vector2(T x, T y) : x(x), y(y) {}
+        explicit Vector2(T xy) : x(xy), y(xy) {}
 
         template<class U>
-        explicit Vector2(Vector2<U> vector) : x(vector.x), y(vector.y) { }
+        explicit Vector2(Vector2<U> vector) : x(vector.x), y(vector.y) {}
 
         /**
          * Methods
@@ -33,62 +32,60 @@ namespace ATA {
             this->y = ny;
         }
 
-        [[nodiscard]]
-        float magnitude() const {
+        [[nodiscard]] float magnitude() const {
             return sqrt((x * x) + (y * y));
         }
 
-        [[nodiscard]]
-        Vector2<float> normalised() const {
-            return { this->x/magnitude(), this->y/magnitude() };
+        [[nodiscard]] Vector2<float> normalised() const {
+            return {this->x / magnitude(), this->y / magnitude()};
         }
 
         /**
          * operators
          */
-        Vector2 operator-(const Vector2& other) {
-            return { this->x - other.x, this->y - other.y };
+        Vector2 operator-(const Vector2 &other) {
+            return {this->x - other.x, this->y - other.y};
         }
 
-        Vector2 operator+(const Vector2& other) const {
-            return { this->x + other.x, this->y + other.y };
-        }
-
-        template<class V>
-        auto operator+(const Vector2<V>& other) const {
-            return Vector2<T> (this->x + other.x, this->y + other.y);
+        Vector2 operator+(const Vector2 &other) const {
+            return {this->x + other.x, this->y + other.y};
         }
 
         template<class V>
-        auto operator-(const Vector2<V>& other) const {
-            return Vector2<T> (this->x - other.x, this->y - other.y);
+        auto operator+(const Vector2<V> &other) const {
+            return Vector2<T>(this->x + other.x, this->y + other.y);
         }
 
-        Vector2& operator+=(const Vector2& other) {
+        template<class V>
+        auto operator-(const Vector2<V> &other) const {
+            return Vector2<T>(this->x - other.x, this->y - other.y);
+        }
+
+        Vector2 &operator+=(const Vector2 &other) {
             this->x += other.x;
             this->y += other.y;
             return *this;
         }
 
         Vector2 operator*(const float value) const {
-            return { this->x * value, this->y * value };
+            return {this->x * value, this->y * value};
         }
 
         Vector2 operator/(const float value) const {
             return Vector2<T>(this->x / value, this->y / value);
         }
 
-        const Vector2& operator-=(const Vector2& other) {
+        const Vector2 &operator-=(const Vector2 &other) {
             this->x -= other.x;
             this->y -= other.y;
             return *this;
         }
 
-        bool operator==(const Vector2& other) const {
+        bool operator==(const Vector2 &other) const {
             return this->x == other.x && this->y == other.y;
         }
 
-        bool operator!=(const Vector2& other) const {
+        bool operator!=(const Vector2 &other) const {
             return this->x != other.x || this->y != other.y;
         }
     };
@@ -101,8 +98,8 @@ namespace ATA {
     struct Vector3 {
         T x, y, z;
 
-        Vector3() : x(0.0f), y(0.0f), z(0.0f) { }
-        Vector3(T x, T y, T z) : x(x), y(y), z(z) { }
+        Vector3() : x(0.0f), y(0.0f), z(0.0f) {}
+        Vector3(T x, T y, T z) : x(x), y(y), z(z) {}
 
         std::array<T, 3> asArray() {
             return {x, y, z};
@@ -117,13 +114,14 @@ namespace ATA {
     struct Vector4 {
         T x, y, z, w;
 
-        Vector4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) { }
-        Vector4(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) { }
+        Vector4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
+        Vector4(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
 
         std::array<T, 4> asArray() {
             return {x, y, z, w};
         }
     };
-}
 
-#endif //HESTIA_ROGUELIKE_DEPENDS_HGE_MATHS_VECTOR_H
+}// namespace ATA
+
+#endif//HESTIA_ROGUELIKE_DEPENDS_HGE_MATHS_VECTOR_H

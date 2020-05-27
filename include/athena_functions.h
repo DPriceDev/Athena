@@ -24,11 +24,14 @@ namespace ATA {
      * @return
      */
     template<class InputIterator, class OutputIterator, class UnaryOperator, class UnaryPredicate>
-    OutputIterator transform_if (InputIterator first, InputIterator last,
-                                 OutputIterator result, UnaryOperator operation,
-                                 UnaryPredicate predicate) {
-        while(first != last) {
-            if(predicate(*first)) {
+    OutputIterator transform_if(InputIterator first,
+                                InputIterator last,
+                                OutputIterator result,
+                                UnaryOperator operation,
+                                UnaryPredicate predicate) {
+
+        while (first != last) {
+            if (predicate(*first)) {
                 *result = operation(*first);
                 ++result;
             }
@@ -36,6 +39,6 @@ namespace ATA {
         }
         return result;
     }
-}
+}// namespace ATA
 
-#endif //ATHENA_ATHENA_FUNCTIONS_H
+#endif//ATHENA_ATHENA_FUNCTIONS_H
