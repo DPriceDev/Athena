@@ -1,0 +1,55 @@
+name: Unit Tests
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: run-and-build-cmake
+      uses: lukka/run-cmake@v2.3
+      with: 
+        cmakeListsOrSettingsJson: CMakeListsTxtBasic
+        configurationRegexFilter: 'Linux-Release'
+        cmakeGenerator: 'Ninja'  
+        buildWithCMakeArgs: '-- -v'
+        buildDirectory: '${{ runner.workspace }}/b/ninja-bash/'
+        useShell: bash
+        
+  mac_os_build:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: run-and-build-cmake
+      uses: lukka/run-cmake@v2.3
+      with:
+        cmakeListsOrSettingsJson: CMakeListsTxtBasic
+        configurationRegexFilter: 'mac-Release'
+        cmakeGenerator: 'Ninja'  
+        buildWithCMakeArgs: '-- -v'
+        buildDirectory: '${{ runner.workspace }}/b/ninja-bash/'
+        useShell: bash
+
+  windows_os_build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: run-and-build-cmake
+      uses: lukka/run-cmake@v2.3
+      with:
+        cmakeListsOrSettingsJson: CMakeListsTxtBasic
+        configurationRegexFilter: 'windows-Release'
+        cmakeGenerator: 'Ninja'  
+        buildWithCMakeArgs: '-- -v'
+        buildDirectory: '${{ runner.workspace }}/b/ninja-bash/'
