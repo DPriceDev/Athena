@@ -7,7 +7,7 @@ on:
     branches: [ develop ]
 
 jobs:
-  build:
+  ubuntu_os_build:
     runs-on: ubuntu-latest
     
     steps:
