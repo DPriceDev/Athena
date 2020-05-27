@@ -1,7 +1,7 @@
 //
 // Created by David Price on 27/05/2020.
 //
-#include "catch2/catch.hpp"
+#include "catch.hpp"
 
 #include <vector>
 #include <array>
