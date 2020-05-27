@@ -40,6 +40,7 @@ cmake_install.cmake
 install_manifest.txt
 *.cmake
 /cmake-build-debug
+*.tcl
 
 # vs code files
 .vscode
