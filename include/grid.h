@@ -7,44 +7,102 @@
 
 #include <algorithm>
 #include <array>
+#include <tuple>
 #include <utility>
 
 #include "vector.h"
 
 namespace ATA {
 
+    /**
+     *
+     */
+    struct GridParameters {
+        long mOriginX, mOriginY;
+        long mWidth, mHeight;
+
+        GridParameters(std::size_t width, std::size_t height, long originX, long originY)
+                : mOriginX(originX), mOriginY(originY), mWidth(width), mHeight(height) {}
+    };
+
+    /**
+     *
+     */
+    struct GridBounds {
+        std::array<long, 4> mBounds;
+
+        GridBounds(long top, long right, long bottom, long left)
+            : mBounds({top, right, bottom, left}) {}
+
+        [[nodiscard]] auto top() const -> long {
+            return mBounds[0];
+        }
+        [[nodiscard]] auto right() const -> long {
+            return mBounds[1];
+        }
+        [[nodiscard]] auto bottom() const -> long {
+            return mBounds[2];
+        }
+        [[nodiscard]] auto left() const -> long {
+            return mBounds[3];
+        }
+    };
+
+    /**
+     *
+     * @tparam Type
+     */
     template<class Type>
     class Grid2D {
         std::vector<Type> mGrid;
         long mOriginX, mOriginY;
         long mWidth, mHeight;
-        std::array<long, 4> mBounds;
+        GridBounds mBounds;
 
     public:
+        using iterator = typename std::vector<Type>::iterator;
+        using const_iterator = typename std::vector<Type>::const_iterator;
+
+//        class column_iterator {
+//
+//        };
+//
+//        class row_iterator {
+//
+//        };
+//
+//        class const_column_iterator {
+//
+//        };
+//
+//        class const_row_iterator {
+//
+//        };
+
         Grid2D(long width, long height, long originX = 0L, long originY = 0L)
             : mOriginX(originX), mOriginY(originY), mWidth(width), mHeight(height),
-              mBounds({originY + height, originX + width, originY, originX}) {
+              mBounds(mHeight + mOriginY, mOriginX + mWidth, originY, originX) {
 
             mGrid.resize(width * height);
-            std::fill_n(mGrid.begin(), (width * height), nullptr);
+            std::fill_n(mGrid.begin(), (width * height), Type());
         }
 
-        explicit Grid2D(std::tuple<long, long, long, long> gridParameters)
-            : mOriginX(std::get<2>(gridParameters)), mOriginY(std::get<3>(gridParameters)),
-              mWidth(std::get<0>(gridParameters)), mHeight(std::get<1>(gridParameters)),
+        explicit Grid2D(GridParameters gridParameters)
+            : mOriginX(gridParameters.mOriginX), mOriginY(gridParameters.mOriginY),
+              mWidth(gridParameters.mWidth), mHeight(gridParameters.mHeight),
               mBounds({mOriginY + mHeight, mOriginX + mWidth, mOriginY, mOriginX}) {
 
-            mGrid.resize(std::get<0>(gridParameters) * std::get<1>(gridParameters));
+            mGrid.resize(mWidth * mHeight);
             std::fill_n(mGrid.begin(), (mWidth * mHeight), Type());
         }
 
-        Type &operator()(long x, long y) {
+        auto operator()(long x, long y) -> Type & {
             auto yPosition = (y - mOriginY) * mWidth;
             auto xPosition = x - mOriginX;
             return mGrid[yPosition + xPosition];
         }
 
-        Type &at(long x, long y) {
+        auto at(long x, long y) -> Type & {
             if (x >= mOriginX && y >= mOriginY && x < mOriginX + mWidth && y <= mOriginY + mHeight) {
                 return this->operator()(x, y);
             } else {
@@ -52,36 +110,52 @@ namespace ATA {
             }
         }
 
-        Type &at(std::pair<long, long> pair) {
+        auto at(std::pair<long, long> pair) -> Type & {
             return this->at(pair.first, pair.second);
         }
 
         template<class Index>
-        Type &at(Vector2<Index> index) {
+        auto at(Vector2<Index> index) -> Type & {
             return this->at(index.x, index.y);
         }
 
-        [[nodiscard]] const auto &getBounds() const {
+        auto begin() -> iterator {
+            return mGrid.begin();
+        }
+
+        auto begin() const -> const_iterator {
+            return mGrid.begin();
+        }
+
+        auto end() -> iterator {
+            return mGrid.end();
+        }
+
+        auto end() const -> const_iterator {
+            return mGrid.begin();
+        }
+
+        [[nodiscard]] auto getBounds() const -> const GridBounds & {
             return mBounds;
         }
 
-        [[nodiscard]] bool isPointInGrid(long x, long y) const {
+        [[nodiscard]] auto isPointInGrid(long x, long y) const -> bool {
             return x >= mOriginX
-                   && x < mOriginX + mWidth - 1
+                   && x <= mOriginX + mWidth - 1
                    && y >= mOriginY
-                   && y < mOriginY + mHeight - 1;
+                   && y <= mOriginY + mHeight - 1;
         }
 
-        [[nodiscard]] const auto &size() const {
+        [[nodiscard]] auto size() const -> std::pair<std::size_t, std::size_t> {
             return std::make_pair(mWidth, mHeight);
         }
 
-        [[nodiscard]] const auto &origin() const {
+        [[nodiscard]] auto origin() const -> std::pair<long, long> {
             return std::make_pair(mOriginX, mOriginY);
         }
 
-        [[nodiscard]] auto gridParameters() const {
-            return std::make_tuple(mWidth, mHeight, mOriginX, mOriginY);
+        [[nodiscard]] auto gridParameters() const -> GridParameters {
+            return GridParameters(mWidth, mHeight, mOriginX, mOriginY);
         }
     };
 }// namespace ATA
