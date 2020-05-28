@@ -6,6 +6,7 @@
 #define ATHENA_GRID_H
 
 #include <algorithm>
+#include <vector>
 #include <array>
 #include <tuple>
 #include <utility>
@@ -21,7 +22,7 @@ namespace ATA {
         long mOriginX, mOriginY;
         long mWidth, mHeight;
 
-        GridParameters(std::size_t width, std::size_t height, long originX, long originY)
+        GridParameters(const std::size_t width, const std::size_t height, const long originX, const long originY)
                 : mOriginX(originX), mOriginY(originY), mWidth(width), mHeight(height) {}
     };
 
@@ -31,7 +32,7 @@ namespace ATA {
     struct GridBounds {
         std::array<long, 4> mBounds;
 
-        GridBounds(long top, long right, long bottom, long left)
+        GridBounds(const long top, const long right, const long bottom, const long left)
             : mBounds({top, right, bottom, left}) {}
 
         [[nodiscard]] auto top() const -> long {
@@ -84,7 +85,6 @@ namespace ATA {
               mBounds(mHeight + mOriginY, mOriginX + mWidth, originY, originX) {
 
             mGrid.resize(width * height);
-            std::fill_n(mGrid.begin(), (width * height), Type());
         }
 
         explicit Grid2D(GridParameters gridParameters)
@@ -93,7 +93,6 @@ namespace ATA {
               mBounds({mOriginY + mHeight, mOriginX + mWidth, mOriginY, mOriginX}) {
 
             mGrid.resize(mWidth * mHeight);
-            std::fill_n(mGrid.begin(), (mWidth * mHeight), Type());
         }
 
         auto operator()(long x, long y) -> Type & {
@@ -140,10 +139,10 @@ namespace ATA {
         }
 
         [[nodiscard]] auto isPointInGrid(long x, long y) const -> bool {
-            return x >= mOriginX
-                   && x <= mOriginX + mWidth - 1
-                   && y >= mOriginY
-                   && y <= mOriginY + mHeight - 1;
+            return x >= mBounds.left()
+                   && x <= mBounds.right() - 1
+                   && y >= mBounds.bottom()
+                   && y <= mBounds.top()- 1;
         }
 
         [[nodiscard]] auto size() const -> std::pair<std::size_t, std::size_t> {
