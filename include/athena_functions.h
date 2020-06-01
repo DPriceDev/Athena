@@ -7,35 +7,36 @@
 
 namespace ATA {
 
-    /**
-     * Transform If
-     * Transforms the range of input iterators from first to last; however, it
-     * will only transform an input iterator if it meets the specific predicate.
-     *
-     * @tparam InputIterator
-     * @tparam OutputIterator
-     * @tparam UnaryOperator
-     * @tparam UnaryPredicate
-     * @param first
-     * @param last
-     * @param result
-     * @param operation
-     * @param predicate
-     * @return
-     */
-    template<class InputIterator, class OutputIterator, class UnaryOperator, class UnaryPredicate>
+    template<class InputIterator, class OutputIterator, class UnaryOperator,
+             class UnaryPredicate>
     OutputIterator transform_if(InputIterator first,
                                 InputIterator last,
                                 OutputIterator result,
                                 UnaryOperator operation,
                                 UnaryPredicate predicate) {
-
-        while (first != last) {
+        for(; first != last; ++first) {
             if (predicate(*first)) {
                 *result = operation(*first);
                 ++result;
             }
-            ++first;
+        }
+        return result;
+    }
+
+    template<class InputIterator1, class InputIterator2, class OutputIterator,
+             class BinaryOperator, class BinaryPredicate>
+    OutputIterator transform_if(InputIterator1 first1,
+                                InputIterator1 last1,
+                                InputIterator2 first2,
+                                OutputIterator result,
+                                BinaryOperator operation,
+                                BinaryPredicate predicate) {
+
+        for(; first1 != last1; ++first1, ++first2) {
+            if (predicate(*first1, *first2)) {
+                *result = operation(*first1, *first2);
+                ++result;
+            }
         }
         return result;
     }

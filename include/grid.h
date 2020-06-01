@@ -64,9 +64,17 @@ namespace ATA {
         using iterator = typename std::vector<Type>::iterator;
         using const_iterator = typename std::vector<Type>::const_iterator;
 
-//        class column_iterator {
-//
-//        };
+        class column_iterator {
+            friend class Grid2D;
+            Type* mGridPtr;
+            explicit column_iterator(Type* gridPtr) : mGridPtr(gridPtr) { }
+
+        public:
+            Type* operator+(const long &offset) const { return mGridPtr + offset; }
+            Type* operator-(const long &offset) const { return mGridPtr - offset; }
+            Type* operator->() const { return mGridPtr; }
+            Type& operator*() const { return *mGridPtr; }
+        };
 //
 //        class row_iterator {
 //
@@ -132,6 +140,19 @@ namespace ATA {
 
         auto end() const -> const_iterator {
             return mGrid.begin();
+        }
+
+        auto columnBegin(long column = 0) const -> column_iterator {
+            Type* it = mGrid.data()[column + mOriginX];
+            return column_iterator(it);
+        }
+
+        auto column(long column = 0, long row = 0) const -> column_iterator {
+            return column_iterator(mGrid.begin() + column + mOriginX + row);
+        }
+
+        auto columnEnd(long column = 0) const -> column_iterator {
+            return column_iterator(mGrid.begin() + (mWidth * mHeight) + column + mOriginX);
         }
 
         [[nodiscard]] auto getBounds() const -> const GridBounds & {

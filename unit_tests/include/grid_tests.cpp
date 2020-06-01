@@ -142,3 +142,24 @@ TEST_CASE("Test full grid vector begin and end iterators") {
 
     CHECK(offsetIndex == 10000);
 }
+
+
+
+
+
+/* test column begin */
+TEST_CASE("Test column begin is correctly retrieved.") {
+    using namespace ATA;
+    auto testGrid = Grid2D<int>(10, 10);
+
+    for(int i = 0; i < 10; ++i) {
+        //testGrid.columnBegin(i);
+        //CHECK(*it == testGrid.at(i, 0));
+    }
+}
+
+
+/* test column end */
+
+
+/* test get specific column */
