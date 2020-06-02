@@ -1,7 +1,7 @@
 //
 // Created by David Price on 27/05/2020.
 //
-#include "catch.hpp"
+#include "../include/catch.hpp"
 
 #include <array>
 #include <map>
@@ -14,7 +14,7 @@ TEST_CASE("Test All vector values are transformed if predicate is true") {
     auto testVectorOut = std::vector<int>();
 
     auto const predicate = [](const auto &value) {
-        return true;
+        return value == value;
     };
 
     auto const transform = [](const auto &value) {
@@ -32,7 +32,7 @@ TEST_CASE("Test All vector values are transformed if predicate is false") {
     auto testVectorOut = std::vector<int>();
 
     auto const predicate = [](const auto &value) {
-        return false;
+        return value != value;
     };
 
     auto const transform = [](const auto &value) {
@@ -133,7 +133,7 @@ TEST_CASE("Test All vector values are Binary transformed if predicate is true") 
     auto testVectorOut = std::vector<int>();
 
     auto const predicate = [](const auto &value1, const auto &value2) {
-        return true;
+        return value1 == value1 && value2 == value2;
     };
 
     auto const transform = [](const auto &value1, const auto &value2) {
@@ -154,7 +154,7 @@ TEST_CASE("Test All vector values are Binary transformed if predicate is false")
     auto testVectorOut = std::vector<int>();
 
     auto const predicate = [](const auto &value1, const auto &value2) {
-      return false;
+      return value1 != value1 && value2 != value2;
     };
 
     auto const transform = [](const auto &value1, const auto &value2) {
@@ -175,7 +175,7 @@ TEST_CASE("Test only odd vector values are Binary transformed") {
     auto testVectorOut = std::vector<int>();
 
     auto const predicate = [](const auto &value1, const auto &value2) {
-      return value1 % 2 != 0;
+      return value1 % 2 != 0 && value2 % 2 != 0;
     };
 
     auto const transform = [](const auto &value1, const auto &value2) {
@@ -206,7 +206,7 @@ TEST_CASE("Test Binary transform if works for arrays and maps if values are odd"
     auto testMapOut = std::map<int, int>{};
 
     auto const predicate = [](const auto &value1, const auto &value2) {
-      return value1 % 2 != 0;
+      return value1 % 2 != 0 && value2 % 2 != 0;
     };
 
     auto const transform = [](const auto &value1, const auto &value2) {
@@ -221,7 +221,7 @@ TEST_CASE("Test Binary transform if works for arrays and maps if values are odd"
     CHECK(testArrayOut == std::array<int, 5>{1, 9});
 
     auto const mapPredicate = [](const auto &value1, const auto &value2) {
-      return value1.second % 2 != 0;
+      return value1.second % 2 != 0 && value2.second % 2 != 0;
     };
 
     auto const mapTransform = [](const auto &value1, const auto &value2) {
@@ -245,7 +245,7 @@ TEST_CASE("Test Binary transform from map to vector, if values are odd") {
     auto testVectorOut = std::vector<int>{};
 
     auto const mapPredicate = [](const auto &value1, const auto &value2) {
-      return value2 % 2 != 0;
+      return value2 % 2 != 0 && value1.second % 2 != 0;
     };
 
     auto const mapToVectorTransform = [](const auto &value1, const auto &value2) {
