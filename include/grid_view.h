@@ -25,8 +25,14 @@ namespace ATA {
                 : mGridPtr(gridPtr), mCurrentX(x), mGridWidth(gridWidth), mViewWidth(viewWidth) {}
 
         public:
-            //            Type *operator+(const long &offset) const { return mGridPtr + offset; }
-            //            Type *operator-(const long &offset) const { return mGridPtr - offset; }
+            Type *operator+(const long &offset) const {
+                return mGridPtr + (((offset) / mViewWidth) * mGridWidth) + (offset % mViewWidth);
+            }
+
+            Type *operator-(const long &offset) const {
+
+                return mGridPtr - (((offset) / mViewWidth) * mGridWidth) - (offset % mViewWidth);
+            }
 
             Type *operator->() { return mGridPtr; }
             Type &operator*() { return *mGridPtr; }

@@ -435,3 +435,15 @@ TEST_CASE("Test Data pointer is retrieved correctly") {
     CHECK(*++testPointer == 3);
     CHECK(*++testPointer == 4);
 }
+
+TEST_CASE("Test row iterator is converted correctly from a column iterator") {
+    using namespace ATA;
+    auto testGrid = Grid2D<int>({{1, 2,},
+                                 {3, 4}});
+
+    auto columnIt = testGrid.columnBegin();
+
+    CHECK(*columnIt == 1);
+    CHECK(*++columnIt == 3);
+    CHECK(*++columnIt.row() == 4);
+}

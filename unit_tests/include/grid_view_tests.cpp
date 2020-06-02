@@ -105,3 +105,49 @@ TEST_CASE("Test gridview iterator iterates in reverse through the array correctl
         CHECK(*--smallIt == output);
     }
 }
+
+TEST_CASE("Test gridview iterator with a variable offset added") {
+    using namespace ATA;
+    auto testGrid = Grid2D<int>({{1,2,3,4,5},
+                                 {6,7,8,9,10},
+                                 {11,12,13,14,15},
+                                 {16,17,18,19,20},
+                                 {21,22,23,24,25}});
+
+    auto gridView = GridView(testGrid);
+
+    CHECK(*(gridView.begin() + 3) == 4);
+    CHECK(*(gridView.begin() + 6) == 7);
+
+    auto testBottomLeft = Vector2<int>(1,1);
+    auto testTopRight = Vector2<int>(3,3);
+
+    auto smallGridView = GridView(testGrid, testBottomLeft, testTopRight);
+    CHECK(*(smallGridView.begin() + 1) == 8);
+    CHECK(*(smallGridView.begin() + 4) == 13);
+    CHECK(*(smallGridView.begin() + 6) == 17);
+    CHECK(*(smallGridView.begin() + 8) == 19);
+}
+
+TEST_CASE("Test gridview iterator with a variable offset subtracted") {
+    using namespace ATA;
+    auto testGrid = Grid2D<int>({{1,2,3,4,5},
+                                 {6,7,8,9,10},
+                                 {11,12,13,14,15},
+                                 {16,17,18,19,20},
+                                 {21,22,23,24,25}});
+
+    auto gridView = GridView(testGrid);
+
+    CHECK(*(--gridView.end() - 3) == 22);
+    CHECK(*(--gridView.end() - 6) == 19);
+
+    auto testBottomLeft = Vector2<int>(1,1);
+    auto testTopRight = Vector2<int>(3,3);
+
+    auto smallGridView = GridView(testGrid, testBottomLeft, testTopRight);
+    CHECK(*(--smallGridView.end() - 1) == 18);
+    CHECK(*(--smallGridView.end() - 4) == 13);
+    CHECK(*(--smallGridView.end() - 6) == 9);
+    CHECK(*(--smallGridView.end() - 8) == 7);
+}

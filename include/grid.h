@@ -103,8 +103,8 @@ namespace ATA {
         };
 
         /**
- *
- */
+         * Column Iterator
+         */
         class column_iterator {
             friend class Grid2D;
             Type *mGridPtr;
