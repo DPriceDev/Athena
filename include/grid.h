@@ -7,7 +7,6 @@
 
 #include <algorithm>
 #include <array>
-#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -22,7 +21,7 @@ namespace ATA {
         long mOriginX, mOriginY;
         long mWidth, mHeight;
 
-        GridParameters(const std::size_t &width, const std::size_t &height, const long &originX, const long &originY)
+        GridParameters(const long &width, const long &height, const long &originX, const long &originY)
             : mOriginX(originX), mOriginY(originY), mWidth(width), mHeight(height) {}
     };
 
@@ -30,8 +29,6 @@ namespace ATA {
      *
      */
     struct GridBounds {
-        std::array<long, 4> mBounds;
-
         GridBounds(const long &top, const long &right, const long &bottom, const long &left)
             : mBounds({top, right, bottom, left}) {}
 
@@ -47,6 +44,9 @@ namespace ATA {
         [[nodiscard]] auto left() const -> long {
             return mBounds[3];
         }
+
+    private:
+        std::array<long, 4> mBounds;
     };
 
     /**
@@ -109,11 +109,11 @@ namespace ATA {
             friend class Grid2D;
             Type *mGridPtr;
             long mWidth;
-            explicit column_iterator(Type *gridPtr, size_t width) : mGridPtr(gridPtr), mWidth(width) {}
+            explicit column_iterator(Type *gridPtr, long width) : mGridPtr(gridPtr), mWidth(width) {}
 
         public:
-            Type *operator+(const long &offset) const { return mGridPtr + (offset * mWidth); }
-            Type *operator-(const long &offset) const { return mGridPtr - (offset * mWidth); }
+            Type *operator+(const size_t &offset) const { return mGridPtr + (offset * mWidth); }
+            Type *operator-(const size_t &offset) const { return mGridPtr - (offset * mWidth); }
             Type *operator->() { return mGridPtr; }
             Type &operator*() { return *mGridPtr; }
 
@@ -149,37 +149,37 @@ namespace ATA {
          * Constructors
          */
 
-        Grid2D(const long &width, const long &height, const long &originX = 0L, const long &originY = 0L)
-            : mOriginX(originX), mOriginY(originY), mWidth(width), mHeight(height),
+        Grid2D(const size_t &width, const size_t &height, const long &originX = 0L, const long &originY = 0L)
+            : mOriginX(originX), mOriginY(originY),
+              mWidth(static_cast<long>(width)), mHeight(static_cast<long>(height)),
               mBounds(mHeight + mOriginY, mOriginX + mWidth, originY, originX) {
 
             mGrid.resize(width * height);
         }
 
         /* todo: static assert the size is right? or fill empty spaces? */
-        Grid2D(std::initializer_list<Type> list, const long &height, const long &originX = 0L, const long &originY = 0L)
-            : mOriginX(originX), mOriginY(originY), mWidth(list.size() / height), mHeight(height),
+        Grid2D(std::initializer_list<Type> list,
+               const long &height,
+               const long &originX = 0L,
+               const long &originY = 0L)
+            : mOriginX(originX),
+              mOriginY(originY),
+              mWidth(static_cast<long>(list.size()) / height),
+              mHeight(height),
               mBounds(mHeight + mOriginY, mOriginX + mWidth, originY, originX) {
             mGrid.insert(mGrid.end(), list);
         }
 
         /* todo: static assert the size is right? or fill empty spaces? */
         /* todo: reverse row input?? */
-        Grid2D(std::initializer_list<std::initializer_list<Type>> list, const long &originX = 0L, const long &originY = 0L)
-            : mOriginX(originX), mOriginY(originY), mWidth(list.begin()->size()), mHeight(list.size()),
-              mBounds(mHeight + mOriginY, mOriginX + mWidth, originY, originX) {
-
-            for (const auto &rowList : list) {
-                mGrid.insert(mGrid.end(), rowList);
-            }
-        }
+        Grid2D(std::initializer_list<std::initializer_list<Type>> list, const long &originX = 0L, const long &originY = 0L);
 
         explicit Grid2D(const GridParameters &gridParameters)
             : mOriginX(gridParameters.mOriginX), mOriginY(gridParameters.mOriginY),
               mWidth(gridParameters.mWidth), mHeight(gridParameters.mHeight),
               mBounds({mOriginY + mHeight, mOriginX + mWidth, mOriginY, mOriginX}) {
 
-            mGrid.resize(mWidth * mHeight);
+            mGrid.resize(static_cast<size_t>(mWidth * mHeight));
         }
 
         /**
@@ -189,15 +189,14 @@ namespace ATA {
         auto operator()(const long &x, const long &y) -> Type & {
             auto yPosition = (y - mOriginY) * mWidth;
             auto xPosition = x - mOriginX;
-            return mGrid[yPosition + xPosition];
+            return mGrid[static_cast<size_t>(yPosition + xPosition)];
         }
 
         auto at(const long &x, const long &y) -> Type & {
-            if (isPointInGrid(x, y)) {
-                return this->operator()(x, y);
-            } else {
+            if (!isPointInGrid(x, y)) {
                 throw std::out_of_range("2D grid");
             }
+            return this->operator()(x, y);
         }
 
         auto at(const std::pair<const long, const long> &pair) -> Type & {
@@ -272,7 +271,7 @@ namespace ATA {
          * Parameters
          */
 
-        auto data() -> Type* {
+        auto data() -> Type * {
             return mGrid.data();
         }
 
@@ -287,18 +286,28 @@ namespace ATA {
                    && y <= mBounds.top() - 1;
         }
 
-        [[nodiscard]] auto size() const -> Vector2<std::size_t> {
-            return Vector2<std::size_t>(mWidth, mHeight);
+        [[nodiscard]] auto size() const -> Vector2<long> {
+            return Vector2<long>(mWidth, mHeight);
         }
 
-        [[nodiscard]] auto origin() const -> Vector2<std::size_t> {
-            return Vector2<std::size_t>(mOriginX, mOriginY);
+        [[nodiscard]] auto origin() const -> Vector2<long> {
+            return Vector2<long>(mOriginX, mOriginY);
         }
 
         [[nodiscard]] auto gridParameters() const -> GridParameters {
             return GridParameters(mWidth, mHeight, mOriginX, mOriginY);
         }
     };
+    template<class Type>
+    Grid2D<Type>::Grid2D(std::initializer_list<std::initializer_list<Type>> list, const long &originX, const long &originY)
+        : mOriginX(originX), mOriginY(originY),
+          mWidth(static_cast<long>(list.begin()->size())), mHeight(static_cast<long>(list.size())),
+          mBounds(mHeight + mOriginY, mOriginX + mWidth, originY, originX) {
+
+        for (const auto &rowList : list) {
+            mGrid.insert(mGrid.end(), rowList);
+        }
+    }
 }// namespace ATA
 
 #endif//ATHENA_GRID_H

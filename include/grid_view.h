@@ -12,16 +12,19 @@ namespace ATA {
     template<class Type>
     class GridView {
         Type *mGridPtr;
-        size_t mGridWidth, mViewWidth, mViewHeight;
+        long mGridWidth;
+        long mViewWidth;
+        long mViewHeight;
 
     public:
         class iterator {
             friend class GridView;
             Type *mGridPtr;
-            size_t mCurrentX;
-            size_t mGridWidth, mViewWidth;
+            long mCurrentX;
+            long mGridWidth;
+            long mViewWidth;
 
-            iterator(Type *gridPtr, size_t x, size_t viewWidth, size_t gridWidth)
+            iterator(Type *gridPtr, long x, long viewWidth, long gridWidth)
                 : mGridPtr(gridPtr), mCurrentX(x), mGridWidth(gridWidth), mViewWidth(viewWidth) {}
 
         public:
@@ -75,26 +78,26 @@ namespace ATA {
 
         template<class Index>
         GridView(Grid2D<Type> &grid, const Vector2<Index> &bottomLeft, const Vector2<Index> &topRight)
-            : mViewWidth((topRight.x - bottomLeft.x) + 1),
-              mViewHeight((topRight.y - bottomLeft.y) + 1),
-              mGridWidth(grid.size().x) {
+            : mGridWidth(grid.size().x),
+              mViewWidth((topRight.x - bottomLeft.x) + 1),
+              mViewHeight((topRight.y - bottomLeft.y) + 1) {
             mGridPtr = grid.data() + ((bottomLeft.y - grid.origin().y) * mGridWidth) + bottomLeft.x - grid.origin().x;
         }
 
         GridView(Grid2D<Type> &grid,
-                 const size_t &bottomLeftX, const size_t &bottomLeftY,
-                 const size_t &topRightX, const size_t &topRightY)
-            : mViewWidth((topRightX - bottomLeftX) + 1),
-              mViewHeight((topRightY - bottomLeftY) + 1),
-              mGridWidth(grid.size().x) {
+                 const long &bottomLeftX, const long &bottomLeftY,
+                 const long &topRightX, const long &topRightY)
+            : mGridWidth(grid.size().x),
+              mViewWidth(topRightX - bottomLeftX + 1),
+              mViewHeight(topRightY - bottomLeftY + 1) {
             mGridPtr = grid.data() + ((bottomLeftY * mGridWidth) + bottomLeftX - grid.origin().x);
         }
 
         explicit GridView(Grid2D<Type> &grid)
-            : mViewWidth(grid.size().x),
-              mViewHeight(grid.size().y),
+            : mGridPtr(grid.data()),
               mGridWidth(grid.size().x),
-              mGridPtr(grid.data()) {}
+              mViewWidth(grid.size().x),
+              mViewHeight(grid.size().y) {}
 
         /**
          * Iterators
