@@ -53,7 +53,7 @@ if(ENABLE_TESTING)
     message(
             "Building Unit Tests."
     )
-    add_subdirectory(unit_tests)
+    add_subdirectory(unit_tests PRIVATE)
 endif()
 
 #todo: Add fuzz testing~
