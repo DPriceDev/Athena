@@ -1,7 +1,7 @@
 //
 // Created by David Price on 27/05/2020.
 //
-#include "../include/catch.hpp"
+#include "catch.hpp"
 
 #include <array>
 #include <map>
