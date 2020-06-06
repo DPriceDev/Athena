@@ -4,7 +4,6 @@
 
 #include "catch.hpp"
 
-#include <algorithm>
 #include <numeric>
 
 #include "grid.h"

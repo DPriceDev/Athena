@@ -73,6 +73,12 @@ namespace ATA {
             explicit row_iterator(Type *gridPtr) : mGridPtr(gridPtr) {}
 
         public:
+            using iterator_category = std::forward_iterator_tag;
+            using value_type = Type;
+            using difference_type = int;
+            using pointer = Type*;
+            using reference = Type&;
+
             Type *operator+(const long &offset) const { return mGridPtr + offset; }
             Type *operator-(const long &offset) const { return mGridPtr - offset; }
             Type *operator->() { return mGridPtr; }
@@ -112,6 +118,12 @@ namespace ATA {
             explicit column_iterator(Type *gridPtr, long width) : mGridPtr(gridPtr), mWidth(width) {}
 
         public:
+            using iterator_category = std::forward_iterator_tag;
+            using value_type = Type;
+            using difference_type = int;
+            using pointer = Type*;
+            using reference = Type&;
+
             Type *operator+(const size_t &offset) const { return mGridPtr + (offset * mWidth); }
             Type *operator-(const size_t &offset) const { return mGridPtr - (offset * mWidth); }
             Type *operator->() { return mGridPtr; }
