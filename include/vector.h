@@ -88,6 +88,14 @@ namespace ATA {
         bool operator!=(const Vector2 &other) const {
             return this->x != other.x || this->y != other.y;
         }
+
+        bool operator>(const Vector2 &other) const {
+            return this->magnitude() > other.magnitude();
+        }
+
+        bool operator<(const Vector2 &other) const {
+            return this->magnitude() < other.magnitude();
+        }
     };
 
     /**
