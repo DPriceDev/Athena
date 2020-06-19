@@ -11,7 +11,6 @@
 
 TEMPLATE_TEST_CASE("Test grid view column begin is correctly retrieved.", "[template]", int, long, float, double) {
     using namespace ATA;
-    static const int sGridSize = 12;
     static const Vector2<int> sGridViewStart{ 1, 1 };
     static const Vector2<int> sGridViewEnd{ 3, 3 };
 
@@ -32,7 +31,6 @@ TEMPLATE_TEST_CASE("Test grid view column begin is correctly retrieved.", "[temp
 
 TEMPLATE_TEST_CASE("Test grid view column end is correctly retrieved.", "[template]", int, long, float, double) {
     using namespace ATA;
-    static const int sGridSize = 12;
     static const Vector2<int> sGridViewStart{ 1, 1 };
     static const Vector2<int> sGridViewEnd{ 3, 3 };
 
@@ -53,7 +51,6 @@ TEMPLATE_TEST_CASE("Test grid view column end is correctly retrieved.", "[templa
 
 TEMPLATE_TEST_CASE("Test grid view column is correctly retrieved.", "[template]", int, long, float, double) {
     using namespace ATA;
-    static const int sGridSize = 12;
     static const Vector2<int> sGridViewStart{ 1, 1 };
     static const Vector2<int> sGridViewEnd{ 3, 3 };
 
@@ -70,14 +67,13 @@ TEMPLATE_TEST_CASE("Test grid view column is correctly retrieved.", "[template]"
     static const std::array<TestType, 9> outputArray{ 6, 7, 8, 11, 12, 13, 16, 17, 18 };
     for(int r = 0; r < 3; ++r) {
         for(int c = 0; c < 3; ++c) {
-            CHECK(*testGridView.column(c, r) == outputArray.at(c + (r * 3)));
+            CHECK(*testGridView.column(c, r) == outputArray[c + (r * 3)]);
         }
     }
 }
 
 TEMPLATE_TEST_CASE("Test grid view column front is correctly retrieved.", "[template]", int, long, float, double) {
     using namespace ATA;
-    static const int sGridSize = 12;
     static const Vector2<int> sGridViewStart{ 1, 1 };
     static const Vector2<int> sGridViewEnd{ 3, 3 };
 
@@ -99,7 +95,6 @@ TEMPLATE_TEST_CASE("Test grid view column front is correctly retrieved.", "[temp
 
 TEMPLATE_TEST_CASE("Test grid view column back is correctly retrieved.", "[template]", int, long, float, double) {
     using namespace ATA;
-    static const int sGridSize = 12;
     static const Vector2<int> sGridViewStart{ 1, 1 };
     static const Vector2<int> sGridViewEnd{ 3, 3 };
 
@@ -120,7 +115,6 @@ TEMPLATE_TEST_CASE("Test grid view column back is correctly retrieved.", "[templ
 
 TEMPLATE_TEST_CASE("Test grid view column iterator increments correctly", "[template]", int, long, float, double) {
     using namespace ATA;
-    static const int sGridSize = 12;
     static const Vector2<int> sGridViewStart{ 1, 1 };
     static const Vector2<int> sGridViewEnd{ 3, 3 };
 
@@ -145,7 +139,6 @@ TEMPLATE_TEST_CASE("Test grid view column iterator increments correctly", "[temp
 
 TEMPLATE_TEST_CASE("Test grid view column iterator decrements correctly", "[template]", int, long, float, double) {
     using namespace ATA;
-    static const int sGridSize = 12;
     static const Vector2<int> sGridViewStart{ 1, 1 };
     static const Vector2<int> sGridViewEnd{ 3, 3 };
 
@@ -170,7 +163,6 @@ TEMPLATE_TEST_CASE("Test grid view column iterator decrements correctly", "[temp
 
 TEMPLATE_TEST_CASE("Test grid view columns work with accumulate correctly.", "[template]", int, long, float, double) {
     using namespace ATA;
-    static const int sGridSize = 12;
     static const Vector2<int> sGridViewStart{ 1, 1 };
     static const Vector2<int> sGridViewEnd{ 3, 3 };
 

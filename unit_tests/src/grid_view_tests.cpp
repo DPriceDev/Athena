@@ -154,7 +154,6 @@ TEMPLATE_TEST_CASE("Test gridview iterator with a variable offset subtracted", "
 
 TEMPLATE_TEST_CASE("Test Grid View Operator() retrieves values correctly", "[template]", int, long, float, double) {
     using namespace ATA;
-    static const int sGridSize = 12;
     static const Vector2<int> sGridViewStart{ 1, 1 };
     static const Vector2<int> sGridViewEnd{ 3, 3 };
 
@@ -171,7 +170,7 @@ TEMPLATE_TEST_CASE("Test Grid View Operator() retrieves values correctly", "[tem
     static const std::array<TestType, 9> outputArray{ 6, 7, 8, 11, 12, 13, 16, 17, 18 };
     for(int r = 0; r < 3; ++r) {
         for(int c = 0; c < 3; ++c) {
-            CHECK(testGridView(c, r) == outputArray.at(c + (r * 3)));
+            CHECK(testGridView(c, r) == outputArray[c + (r * 3)]);
         }
     }
 }
