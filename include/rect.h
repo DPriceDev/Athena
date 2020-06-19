@@ -13,12 +13,24 @@ namespace ATA {
      * Rect Templated Class
      */
     template<class Type>
-    struct Rect {
+    class Rect {
         Vector2<Type> mPosition;
         Vector2<Type> mSize;
 
+    public:
         Rect(Vector2<Type> position, Vector2<Type> size) : mPosition(position), mSize(size) {}
-        Rect() : mPosition(Vector2<Type>()), mSize(Vector2<Type>()) {}
+        Rect(Type positionX, Type positionY, Type sizeX, Type sizeY)
+            : mPosition(Vector2<Type>{positionX, positionY}), mSize(Vector2<Type>{sizeX, sizeY}) {}
+        Rect(Type sizeX, Type sizeY) : mPosition(Vector2<Type>()), mSize(Vector2<Type>{sizeX, sizeY}) {}
+
+
+        Vector2<Type> position() {
+            return mPosition;
+        }
+
+        Vector2<Type> size() {
+            return mSize;
+        }
 
         [[nodiscard]] Vector2<Type> bottomLeft() const {
             return mPosition;
@@ -36,9 +48,12 @@ namespace ATA {
             return {mPosition.x + mSize.x, mPosition.y + mSize.y};
         }
 
-        [[maybe_unused]]
-        [[nodiscard]] bool
-        isOverlapping(const Rect &other) const {
+        [[nodiscard]] std::array<Vector2<Type>, 4> vertices() const {
+            return std::array<Vector2<Type>, 4>{
+                    topLeft(), topRight(), bottomRight(), bottomLeft()};
+        }
+
+        [[nodiscard]] bool isOverlapping(const Rect &other) const {
             if (this->topLeft().x >= other.bottomRight().x
                 || other.topLeft().x >= this->bottomRight().x) {
                 return false;
@@ -48,13 +63,11 @@ namespace ATA {
                      || other.topLeft().y <= this->bottomRight().y);
         }
 
-        [[maybe_unused]]
-        [[nodiscard]] Vector2<float>
-        midpoint() const {
-            return Vector2<float>(mPosition.x + (mSize.x / 2), mPosition.y + (mSize.y / 2));
+        [[nodiscard]] Vector2<double> midpoint() const {
+            return Vector2<double>(mPosition.x + (mSize.x / 2), mPosition.y + (mSize.y / 2));
         }
 
-        [[nodiscard]] float area() const {
+        [[nodiscard]] double area() const {
             return mSize.x * mSize.y;
         }
     };

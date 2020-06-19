@@ -7,147 +7,171 @@
 #include "grid.h"
 #include "grid_view.h"
 
-TEST_CASE("Test Initialization of a matching grid view") {
+TEMPLATE_TEST_CASE("Test Initialization of a smaller grid view ", "[template]", int, long, float, double) {
     using namespace ATA;
-    auto testGrid = Grid2D<int>({{20,2,3,4,5},
-                                 {1,2,3,4,5},
-                                 {1,2,3,4,5},
-                                 {1,2,3,4,5},
-                                 {1,2,3,4,10}});
+    static const Vector2<int> sGridViewStart{ 1, 1 };
+    static const Vector2<int> sGridViewEnd{ 3, 3 };
 
-   auto gridView = GridView(testGrid);
+    static const std::initializer_list<std::initializer_list<TestType>> testGridValues = {
+            { 0, 1, 2, 3, 4 },
+            { 5, 6, 7, 8, 9 },
+            { 10, 11, 12, 13, 14 },
+            { 15, 16, 17, 18, 19 },
+            { 20, 21, 22, 23, 24 }};
 
-   CHECK(*gridView.begin() == 20);
-   CHECK(*--gridView.end() == 10);
+    static auto testGrid = Grid2D<TestType>(testGridValues);
+    static auto testGridView = GridView<TestType>(testGrid, sGridViewStart, sGridViewEnd);
+
+   CHECK(*testGridView.begin() == 6);
+   CHECK(*--testGridView.end() == 18);
 }
 
-TEST_CASE("Test Initialization of a smaller grid view") {
+TEMPLATE_TEST_CASE("Test Initialization of a matching grid view", "[template]", int, long, float, double) {
     using namespace ATA;
-    auto testGrid = Grid2D<int>({{1,2,3,4,5},
-                                 {6,7,8,9,10},
-                                 {11,12,13,14,15},
-                                 {16,17,18,19,20},
-                                 {21,22,23,24,25}});
+    static const std::initializer_list<std::initializer_list<TestType>> testGridValues = {
+            { 0, 1, 2, 3, 4 },
+            { 5, 6, 7, 8, 9 },
+            { 10, 11, 12, 13, 14 },
+            { 15, 16, 17, 18, 19 },
+            { 20, 21, 22, 23, 24 }};
 
-    auto gridView = GridView(testGrid, 1, 1, 3, 3);
+    static auto testGrid = Grid2D<TestType>(testGridValues);
+    static auto testGridView = GridView<TestType>(testGrid);
 
-    CHECK(*gridView.begin() == 7);
-    CHECK(*--gridView.end() == 19);
+    CHECK(*testGridView.begin() == 0);
+    CHECK(*--testGridView.end() == 24);
 }
 
-TEST_CASE("Test Initialization of a smaller grid view with vector2") {
+TEMPLATE_TEST_CASE("Test gridview iterator iterates through the array correctly", "[template]", int, long, float, double) {
     using namespace ATA;
-    auto testGrid = Grid2D<int>({{1,2,3,4,5},
-                                 {6,7,8,9,10},
-                                 {11,12,13,14,15},
-                                 {16,17,18,19,20},
-                                 {21,22,23,24,25}});
+    static const std::initializer_list<std::initializer_list<TestType>> testGridValues = {
+            { 0, 1, 2, 3, 4 },
+            { 5, 6, 7, 8, 9 },
+            { 10, 11, 12, 13, 14 },
+            { 15, 16, 17, 18, 19 },
+            { 20, 21, 22, 23, 24 }};
 
-    auto testBottomLeft = Vector2<int>(1,1);
-    auto testTopRight = Vector2<int>(3,3);
+    static auto testGrid = Grid2D<TestType>(testGridValues);
+    static auto testGridView = GridView<TestType>(testGrid);
 
-    auto gridView = GridView(testGrid, testBottomLeft, testTopRight);
-
-    CHECK(*gridView.begin() == 7);
-    CHECK(*--gridView.end() == 19);
-}
-
-TEST_CASE("Test gridview iterator iterates through the array correctly") {
-    using namespace ATA;
-    auto testGrid = Grid2D<int>({{1,2,3,4,5},
-                                 {6,7,8,9,10},
-                                 {11,12,13,14,15},
-                                 {16,17,18,19,20},
-                                 {21,22,23,24,25}});
-
-    auto gridView = GridView(testGrid);
-
-    auto it = gridView.begin();
-    for(int i = 0; i < 25; ++i) {
-        CHECK(*it == i + 1);
+    static const auto sGridLength = 25;
+    auto it = testGridView.begin();
+    for(int i = 0; i < sGridLength; ++i) {
+        CHECK(*it == i);
         ++it;
     }
 
-    auto testBottomLeft = Vector2<int>(1,1);
-    auto testTopRight = Vector2<int>(3,3);
+    static const Vector2<int> sGridViewStart{ 1, 1 };
+    static const Vector2<int> sGridViewEnd{ 3, 3 };
+    static const std::array<TestType, 9> outputArray{ 6, 7, 8, 11, 12, 13, 16, 17, 18};
 
-    auto smallGridView = GridView(testGrid, testBottomLeft, testTopRight);
-    int outputArray[] = { 7, 8, 9, 12, 13, 14, 17, 18, 19};
-    auto smallIt = smallGridView.begin();
-    for(int output : outputArray) {
+    static auto testSmallGridView = GridView<TestType>(testGrid, sGridViewStart, sGridViewEnd);
+    auto smallIt = testSmallGridView.begin();
+    for(TestType output : outputArray) {
         CHECK(*smallIt == output);
         ++smallIt;
     }
 }
 
-TEST_CASE("Test gridview iterator iterates in reverse through the array correctly") {
+TEMPLATE_TEST_CASE("Test gridview iterator iterates in reverse through the array correctly", "[template]", int, long, float, double) {
     using namespace ATA;
-    auto testGrid = Grid2D<int>({{1,2,3,4,5},
-                                 {6,7,8,9,10},
-                                 {11,12,13,14,15},
-                                 {16,17,18,19,20},
-                                 {21,22,23,24,25}});
+    static const std::initializer_list<std::initializer_list<TestType>> testGridValues = {
+            { 0, 1, 2, 3, 4 },
+            { 5, 6, 7, 8, 9 },
+            { 10, 11, 12, 13, 14 },
+            { 15, 16, 17, 18, 19 },
+            { 20, 21, 22, 23, 24 }};
 
-    auto gridView = GridView(testGrid);
+    static auto testGrid = Grid2D<TestType>(testGridValues);
+    static auto testGridView = GridView<TestType>(testGrid);
+    static const auto sGridLength = 25;
 
-    auto it = gridView.end();
-    for(int i = 24; i > -1; --i) {
-        CHECK(*--it == i + 1);
+    auto it = testGridView.end();
+    for(int i = sGridLength - 1; i > -1; --i) {
+        CHECK(*--it == i);
     }
 
-    auto testBottomLeft = Vector2<int>(1,1);
-    auto testTopRight = Vector2<int>(3,3);
+    static const Vector2<int> sGridViewStart{ 1, 1 };
+    static const Vector2<int> sGridViewEnd{ 3, 3 };
+    static const std::array<TestType, 9> outputArray{ 18, 17, 16, 13, 12, 11, 8, 7, 6};
 
-    auto smallGridView = GridView(testGrid, testBottomLeft, testTopRight);
-    int outputArray[] = { 19, 18, 17, 14, 13, 12, 9, 8, 7};
-    auto smallIt = smallGridView.end();
-    for(int output : outputArray) {
+    static auto testSmallGridView = GridView<TestType>(testGrid, sGridViewStart, sGridViewEnd);
+    auto smallIt = testSmallGridView.end();
+    for(TestType output : outputArray) {
         CHECK(*--smallIt == output);
     }
 }
 
-TEST_CASE("Test gridview iterator with a variable offset added") {
+TEMPLATE_TEST_CASE("Test gridview iterator with a variable offset added", "[template]", int, long, float, double) {
     using namespace ATA;
-    auto testGrid = Grid2D<int>({{1,2,3,4,5},
-                                 {6,7,8,9,10},
-                                 {11,12,13,14,15},
-                                 {16,17,18,19,20},
-                                 {21,22,23,24,25}});
+    static const std::initializer_list<std::initializer_list<TestType>> testGridValues = {
+            { 0, 1, 2, 3, 4 },
+            { 5, 6, 7, 8, 9 },
+            { 10, 11, 12, 13, 14 },
+            { 15, 16, 17, 18, 19 },
+            { 20, 21, 22, 23, 24 }};
 
-    auto gridView = GridView(testGrid);
+    static auto testGrid = Grid2D<TestType>(testGridValues);
+    static auto testGridView = GridView<TestType>(testGrid);
 
-    CHECK(*(gridView.begin() + 3) == 4);
-    CHECK(*(gridView.begin() + 6) == 7);
+    CHECK(*(testGridView.begin() + 3) == 3);
+    CHECK(*(testGridView.begin() + 6) == 6);
 
-    auto testBottomLeft = Vector2<int>(1,1);
-    auto testTopRight = Vector2<int>(3,3);
+    static const Vector2<int> sGridViewStart{ 1, 1 };
+    static const Vector2<int> sGridViewEnd{ 3, 3 };
 
-    auto smallGridView = GridView(testGrid, testBottomLeft, testTopRight);
-    CHECK(*(smallGridView.begin() + 1) == 8);
-    CHECK(*(smallGridView.begin() + 4) == 13);
-    CHECK(*(smallGridView.begin() + 6) == 17);
-    CHECK(*(smallGridView.begin() + 8) == 19);
+    static auto testSmallGridView = GridView<TestType>(testGrid, sGridViewStart, sGridViewEnd);
+    CHECK(*(testSmallGridView.begin() + 1) == 7);
+    CHECK(*(testSmallGridView.begin() + 4) == 12);
+    CHECK(*(testSmallGridView.begin() + 6) == 16);
+    CHECK(*(testSmallGridView.begin() + 8) == 18);
 }
 
-TEST_CASE("Test gridview iterator with a variable offset subtracted") {
+TEMPLATE_TEST_CASE("Test gridview iterator with a variable offset subtracted", "[template]", int, long, float, double) {
     using namespace ATA;
-    auto testGrid = Grid2D<int>({{1,2,3,4,5},
-                                 {6,7,8,9,10},
-                                 {11,12,13,14,15},
-                                 {16,17,18,19,20},
-                                 {21,22,23,24,25}});
+    static const std::initializer_list<std::initializer_list<TestType>> testGridValues = {
+            { 0, 1, 2, 3, 4 },
+            { 5, 6, 7, 8, 9 },
+            { 10, 11, 12, 13, 14 },
+            { 15, 16, 17, 18, 19 },
+            { 20, 21, 22, 23, 24 }};
 
-    auto gridView = GridView(testGrid);
+    static auto testGrid = Grid2D<TestType>(testGridValues);
+    static auto testGridView = GridView<TestType>(testGrid);
 
-    CHECK(*(--gridView.end() - 3) == 22);
-    CHECK(*(--gridView.end() - 6) == 19);
+    CHECK(*(--testGridView.end() - 3) == 21);
+    CHECK(*(--testGridView.end() - 6) == 18);
 
-    auto testBottomLeft = Vector2<int>(1,1);
-    auto testTopRight = Vector2<int>(3,3);
+    static const Vector2<int> sGridViewStart{ 1, 1 };
+    static const Vector2<int> sGridViewEnd{ 3, 3 };
 
-    auto smallGridView = GridView(testGrid, testBottomLeft, testTopRight);
-    CHECK(*(--smallGridView.end() - 1) == 18);
-    CHECK(*(--smallGridView.end() - 4) == 13);
-    CHECK(*(--smallGridView.end() - 6) == 9);
-    CHECK(*(--smallGridView.end() - 8) == 7);
+    static auto testSmallGridView = GridView<TestType>(testGrid, sGridViewStart, sGridViewEnd);
+    CHECK(*(--testSmallGridView.end() - 1) == 17);
+    CHECK(*(--testSmallGridView.end() - 4) == 12);
+    CHECK(*(--testSmallGridView.end() - 6) == 8);
+    CHECK(*(--testSmallGridView.end() - 8) == 6);
+}
+
+TEMPLATE_TEST_CASE("Test Grid View Operator() retrieves values correctly", "[template]", int, long, float, double) {
+    using namespace ATA;
+    static const int sGridSize = 12;
+    static const Vector2<int> sGridViewStart{ 1, 1 };
+    static const Vector2<int> sGridViewEnd{ 3, 3 };
+
+    static const std::initializer_list<std::initializer_list<TestType>> testGridValues = {
+            { 0, 1, 2, 3, 4 },
+            { 5, 6, 7, 8, 9 },
+            { 10, 11, 12, 13, 14 },
+            { 15, 16, 17, 18, 19 },
+            { 20, 21, 22, 23, 24 }};
+
+    static auto testGrid = Grid2D<TestType>(testGridValues);
+    static auto testGridView = GridView<TestType>(testGrid, sGridViewStart, sGridViewEnd);
+
+    static const std::array<TestType, 9> outputArray{ 6, 7, 8, 11, 12, 13, 16, 17, 18 };
+    for(int r = 0; r < 3; ++r) {
+        for(int c = 0; c < 3; ++c) {
+            CHECK(testGridView(c, r) == outputArray.at(c + (r * 3)));
+        }
+    }
 }
