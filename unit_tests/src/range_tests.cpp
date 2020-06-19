@@ -21,11 +21,11 @@ TEMPLATE_TEST_CASE("Test value falls in range", "[template]", int, float, double
 
     int b = 0;
     for(int i = 0; i < 7; ++i, ++b) {
-        CHECK(range.inRange(testValues.at(i)) == testAssertions.at(i));
+        CHECK(range.inRange(testValues[i]) == testAssertions[i]);
     }
 
     b = 0;
     for(int i = 0; i < 7; ++i, ++b) {
-        CHECK(negativeRange.inRange(testValues.at(i)) == negativeTestAssertions.at(i));
+        CHECK(negativeRange.inRange(testValues[i]) == negativeTestAssertions[i]);
     }
 }
