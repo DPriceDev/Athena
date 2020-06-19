@@ -14,18 +14,17 @@ TEMPLATE_TEST_CASE("Test value falls in range", "[template]", int, float, double
     const static std::array<bool, 7> testAssertions{true, true, false, true, false, false, false };
     const static std::array<bool, 7> negativeTestAssertions{true, false, true, false, true, false, false };
 
-    const static int rangeSize = 10;
-    auto range = Range(0, rangeSize);
-    auto negativeRange = Range(-rangeSize, 0);
-
+    const static TestType rangeSize = 10;
+    auto range = Range<TestType>(0, rangeSize);
+    auto negativeRange = Range<TestType>(-rangeSize, 0);
 
     int b = 0;
-    for(int i = 0; i < 7; ++i, ++b) {
+    for(size_t i = 0; i < 7; ++i, ++b) {
         CHECK(range.inRange(testValues[i]) == testAssertions[i]);
     }
 
     b = 0;
-    for(int i = 0; i < 7; ++i, ++b) {
+    for(size_t i = 0; i < 7; ++i, ++b) {
         CHECK(negativeRange.inRange(testValues[i]) == negativeTestAssertions[i]);
     }
 }
