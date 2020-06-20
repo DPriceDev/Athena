@@ -9,46 +9,51 @@
 
 #include "athena_functions.h"
 
-TEST_CASE("Test All vector values are transformed if predicate is true") {
-    auto testVectorIn = std::vector<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    auto testVectorOut = std::vector<int>();
+TEMPLATE_TEST_CASE("Test All vector values are transformed if predicate is true", "[template]", int, long, float, double) {
+    const static auto sTestSourceVector = std::vector<TestType> {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    const static auto outputCheckVector = std::vector<TestType> {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
 
     auto const predicate = [](const auto &value) {
-        return value == value;
+      return value / 1 == value;
     };
 
     auto const transform = [](const auto &value) {
-        return value * 2;
+      return value * 2;
     };
 
-    ATA::transform_if(testVectorIn.begin(), testVectorIn.end(), std::back_inserter(testVectorOut),
-                      transform, predicate);
+    auto outputVector = std::vector<TestType>{ };
+    ATA::transform_if(sTestSourceVector.begin(),
+                              sTestSourceVector.end(),
+                              std::back_inserter(outputVector),
+                              transform,
+                              predicate);
 
-    CHECK(testVectorOut == std::vector<int>{0, 2, 4, 6, 8, 10, 12, 14, 16, 18});
+    CHECK(outputVector == outputCheckVector);
 }
 
-TEST_CASE("Test All vector values are transformed if predicate is false") {
-    auto testVectorIn = std::vector<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    auto testVectorOut = std::vector<int>();
+TEMPLATE_TEST_CASE("Test All vector values are transformed if predicate is false", "[template]", int, long, float, double) {
+    const static auto sTestSourceVector = std::vector<TestType> {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     auto const predicate = [](const auto &value) {
-        return value != value;
+      return value / 1 != value;
     };
 
     auto const transform = [](const auto &value) {
-        return value * 2;
+      return value * 2;
     };
 
-    ATA::transform_if(testVectorIn.begin(), testVectorIn.end(), std::back_inserter(testVectorOut),
+    auto outputVector = std::vector<TestType>{ };
+    ATA::transform_if(sTestSourceVector.begin(),
+                      sTestSourceVector.end(),
+                      std::back_inserter(outputVector),
                       transform,
                       predicate);
 
-    CHECK(testVectorOut.empty());
+    CHECK(outputVector.empty());
 }
 
-TEST_CASE("Test only odd vector values are transformed") {
-    auto testVectorIn = std::vector<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    auto testVectorOut = std::vector<int>();
+TEMPLATE_TEST_CASE("Test only odd vector values are transformed", "[template]", int, long) {
+    const static auto sTestSourceVector = std::vector<TestType> {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     auto const predicate = [](const auto &value) {
         return value % 2 != 0;
@@ -58,11 +63,15 @@ TEST_CASE("Test only odd vector values are transformed") {
         return value * 2;
     };
 
-    ATA::transform_if(testVectorIn.begin(), testVectorIn.end(), std::back_inserter(testVectorOut),
+    auto outputVector = std::vector<TestType>{ };
+    ATA::transform_if(sTestSourceVector.begin(),
+                      sTestSourceVector.end(),
+                      std::back_inserter(outputVector),
                       transform,
                       predicate);
 
-    CHECK(testVectorOut == std::vector<int>{2, 6, 10, 14, 18});
+    const static auto outputCheckVector = std::vector<TestType>{2, 6, 10, 14, 18};
+    CHECK(outputVector == outputCheckVector);
 }
 
 TEST_CASE("Test transform if works for arrays and maps if values are odd") {

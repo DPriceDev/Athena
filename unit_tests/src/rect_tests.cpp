@@ -85,13 +85,13 @@ TEMPLATE_TEST_CASE("Test Rect midpoint retrieved correctly", "[template]", int, 
     static const TestType sRectPositionX = 10;
     static const TestType sRectPositionY = 14;
 
-    static const Vector2<double> output{15.0, 19.0};
+    static const Vector2<float> output{15, 19};
     auto rect = Rect(sRectPositionX, sRectPositionY, sRectSize, sRectSize);
     CHECK(rect.midpoint() == output);
 
     static const TestType sNegativeRectPositionX = -10;
     static const TestType sNegativeRectPositionY = -14;
-    static const Vector2<double> negativeOutput{-5.0, -9.0};
+    static const Vector2<float> negativeOutput{-5, -9};
     auto negativeRect = Rect(sNegativeRectPositionX, sNegativeRectPositionY, sRectSize, sRectSize);
 
     CHECK(negativeRect.midpoint() == negativeOutput);
@@ -110,13 +110,13 @@ TEMPLATE_TEST_CASE("Test Rect area retrieved correctly", "[template]", int, long
 
     static const TestType sNegativeRectPositionX = -10;
     static const TestType sNegativeRectPositionY = -14;
-    static const Vector2<double> negativeOutput{-5.0, -9.0};
+    static const Vector2<TestType> negativeOutput{-5, -9};
     auto negativeRect = Rect(sNegativeRectPositionX, sNegativeRectPositionY, sRectSize, sRectSize);
 
     CHECK(negativeRect.area() == output);
 
     static const TestType sRectSizeY = 5;
-    static const double shortOutput{50.0};
+    static const TestType shortOutput{50};
     auto shortRect = Rect(sNegativeRectPositionX, sNegativeRectPositionY, sRectSize, sRectSizeY);
     CHECK(shortRect.area() == shortOutput);
 }

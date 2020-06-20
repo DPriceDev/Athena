@@ -5,7 +5,12 @@ set(SRC
         grid_tests.cpp
         grid_view_tests.cpp
         grid_row_iterator_tests.cpp
-        grid_column_iterator_tests.cpp athena_maths_tests.cpp range_tests.cpp rect_tests.cpp grid_view_row_iterator_tests.cpp grid_view_column_iterator_tests.cpp)
+        grid_column_iterator_tests.cpp
+        athena_maths_tests.cpp
+        range_tests.cpp
+        rect_tests.cpp
+        grid_view_row_iterator_tests.cpp
+        grid_view_column_iterator_tests.cpp)
 
 add_executable(athenaUnitTests ../catch_tests_runner.cpp ${SRC})
 target_link_libraries(athenaUnitTests PRIVATE athena_project_warnings athena_project_options athena_catch_main)

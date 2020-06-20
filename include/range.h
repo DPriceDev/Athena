@@ -8,8 +8,8 @@
 namespace ATA {
     template<class Type>
     class Range {
-        Type mMaximum;
         Type mMinimum;
+        Type mMaximum;
 
     public:
         Range(const Type &minimum, const Type &maximum) : mMinimum(minimum), mMaximum(maximum) {}

@@ -18,19 +18,16 @@ namespace ATA {
         Vector2<Type> mSize;
 
     public:
-        Rect(Vector2<Type> position, Vector2<Type> size) : mPosition(position), mSize(size) {}
+        Rect(Vector2<Type> position, Vector2<Type> size) : mPosition(position), mSize(size) { }
         Rect(Type positionX, Type positionY, Type sizeX, Type sizeY)
-            : mPosition(Vector2<Type>{positionX, positionY}), mSize(Vector2<Type>{sizeX, sizeY}) {}
-        Rect(Type sizeX, Type sizeY) : mPosition(Vector2<Type>()), mSize(Vector2<Type>{sizeX, sizeY}) {}
+            : mPosition(Vector2<Type> {positionX, positionY}), mSize(Vector2<Type> {sizeX, sizeY}) { }
+        Rect(Type sizeX, Type sizeY) : mPosition(Vector2<Type>()), mSize(Vector2<Type> {sizeX, sizeY}) { }
 
+        Vector2<Type> &position() { return mPosition; }
+        const Vector2<Type> &position() const { return mPosition; }
 
-        Vector2<Type> position() {
-            return mPosition;
-        }
-
-        Vector2<Type> size() {
-            return mSize;
-        }
+        Vector2<Type> &size() { return mSize; }
+        const Vector2<Type> &size() const { return mSize; }
 
         [[nodiscard]] Vector2<Type> bottomLeft() const {
             return mPosition;
@@ -49,7 +46,7 @@ namespace ATA {
         }
 
         [[nodiscard]] std::array<Vector2<Type>, 4> vertices() const {
-            return std::array<Vector2<Type>, 4>{
+            return std::array<Vector2<Type>, 4> {
                     topLeft(), topRight(), bottomRight(), bottomLeft()};
         }
 
@@ -63,12 +60,12 @@ namespace ATA {
                      || other.topLeft().y <= this->bottomRight().y);
         }
 
-        [[nodiscard]] Vector2<double> midpoint() const {
-            return Vector2<double>(mPosition.x + (mSize.x / 2), mPosition.y + (mSize.y / 2));
+        [[nodiscard]] Vector2<float> midpoint() const {
+            return Vector2<float>(static_cast<float>(mPosition.x + (mSize.x / 2)), static_cast<float>(mPosition.y + (mSize.y / 2)));
         }
 
-        [[nodiscard]] double area() const {
-            return mSize.x * mSize.y;
+        [[nodiscard]] float area() const {
+            return static_cast<float>(mSize.x * mSize.y);
         }
     };
 

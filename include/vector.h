@@ -17,12 +17,12 @@ namespace ATA {
     struct Vector2 {
         T x, y;
 
-        Vector2() : x(0), y(0) {}
-        Vector2(T x, T y) : x(x), y(y) {}
-        explicit Vector2(T xy) : x(xy), y(xy) {}
+        Vector2() : x(0), y(0) { }
+        Vector2(T posX, T posY) : x(posX), y(posY) { }
+        explicit Vector2(T posXY) : x(posXY), y(posXY) { }
 
         template<class U>
-        explicit Vector2(Vector2<U> vector) : x(vector.x), y(vector.y) {}
+        explicit Vector2(Vector2<U> vector) : x(vector.x), y(vector.y) { }
 
         /**
          * Methods
@@ -106,8 +106,8 @@ namespace ATA {
     struct Vector3 {
         T x, y, z;
 
-        Vector3() : x(0.0f), y(0.0f), z(0.0f) {}
-        Vector3(T x, T y, T z) : x(x), y(y), z(z) {}
+        Vector3() : x(0.0f), y(0.0f), z(0.0f) { }
+        Vector3(T posX, T posY, T posZ) : x(posX), y(posY), z(posZ) { }
 
         std::array<T, 3> asArray() {
             return {x, y, z};
@@ -122,8 +122,8 @@ namespace ATA {
     struct Vector4 {
         T x, y, z, w;
 
-        Vector4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
-        Vector4(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
+        Vector4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) { }
+        Vector4(T posX, T posY, T posZ, T posW) : x(posX), y(posY), z(posZ), w(posW) { }
 
         std::array<T, 4> asArray() {
             return {x, y, z, w};
