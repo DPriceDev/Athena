@@ -51,17 +51,18 @@ namespace ATA {
         }
 
         [[nodiscard]] bool isOverlapping(const Rect &other) const {
-            if (this->topLeft().x >= other.bottomRight().x
-                || other.topLeft().x >= this->bottomRight().x) {
+            if (this->topLeft().x > other.bottomRight().x
+                || other.topLeft().x > this->bottomRight().x) {
                 return false;
             }
 
-            return !(this->topLeft().y <= other.bottomRight().y
-                     || other.topLeft().y <= this->bottomRight().y);
+            return !(this->topLeft().y < other.bottomRight().y
+                     || other.topLeft().y < this->bottomRight().y);
         }
 
         [[nodiscard]] Vector2<float> midpoint() const {
-            return Vector2<float>(static_cast<float>(mPosition.x + (mSize.x / 2)), static_cast<float>(mPosition.y + (mSize.y / 2)));
+            return Vector2<float>(static_cast<float>(mPosition.x + (mSize.x / 2)),
+                                  static_cast<float>(mPosition.y + (mSize.y / 2)));
         }
 
         [[nodiscard]] float area() const {

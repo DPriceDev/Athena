@@ -79,6 +79,22 @@ TEMPLATE_TEST_CASE("Test Rect overlapping another Rect", "[template]", int, long
     CHECK(!rect.isOverlapping(negativeNonOverlappingRect));
 }
 
+TEMPLATE_TEST_CASE("Test Rect overlapping another Rect edge cases", "[template]", int, long, float, double) {
+    using namespace ATA;
+    static const TestType sRectSize = 10;
+    static const TestType sOffset = -10;
+
+    auto topLeftRect = Rect<TestType>(sOffset, 0, sRectSize, sRectSize);
+    auto topRightRect = Rect<TestType>(-0, 0, sRectSize, sRectSize);
+    auto bottomLeftRect = Rect<TestType>(sOffset, sOffset, sRectSize, sRectSize);
+    auto bottomRightRect = Rect<TestType>(sOffset, sOffset, sRectSize, sRectSize);
+
+    CHECK(topLeftRect.isOverlapping(topRightRect));
+    CHECK(topRightRect.isOverlapping(bottomRightRect));
+    CHECK(bottomRightRect.isOverlapping(bottomLeftRect));
+    CHECK(bottomLeftRect.isOverlapping(topLeftRect));
+}
+
 TEMPLATE_TEST_CASE("Test Rect midpoint retrieved correctly", "[template]", int, long, float, double) {
     using namespace ATA;
     static const TestType sRectSize = 10;
