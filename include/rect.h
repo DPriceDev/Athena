@@ -60,6 +60,14 @@ namespace ATA {
                      || other.topLeft().y < this->bottomRight().y);
         }
 
+        [[nodiscard]] bool containsPoint(const Vector2<Type> &point) const {
+            if(point.x < topLeft().x || point.x > topRight().x) {
+                return false;
+            }
+
+            return point.y <= topLeft().y && point.y >= bottomLeft().y;
+        }
+
         [[nodiscard]] Vector2<float> midpoint() const {
             return Vector2<float>(static_cast<float>(mPosition.x + (mSize.x / 2)),
                                   static_cast<float>(mPosition.y + (mSize.y / 2)));

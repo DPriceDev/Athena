@@ -298,6 +298,11 @@ namespace ATA {
                    && y <= mBounds.top() - 1;
         }
 
+        template<class index>
+        [[nodiscard]] auto isPointInGrid(const Vector2<index> &vector) const -> bool {
+            return isPointInGrid(vector.x, vector.y);
+        }
+
         [[nodiscard]] auto size() const -> Vector2<long> {
             return Vector2<long>(mWidth, mHeight);
         }
