@@ -122,17 +122,17 @@ TEMPLATE_TEST_CASE("Test Rect area retrieved correctly", "[template]", int, long
 
     static const double output{100.0};
     auto rect = Rect(sRectPositionX, sRectPositionY, sRectSize, sRectSize);
-    CHECK(rect.area() == output);
+    CHECK(static_cast<double>(rect.area()) == output);
 
     static const TestType sNegativeRectPositionX = -10;
     static const TestType sNegativeRectPositionY = -14;
     static const Vector2<TestType> negativeOutput{-5, -9};
     auto negativeRect = Rect(sNegativeRectPositionX, sNegativeRectPositionY, sRectSize, sRectSize);
 
-    CHECK(negativeRect.area() == output);
+    CHECK(static_cast<double>(negativeRect.area()) == output);
 
     static const TestType sRectSizeY = 5;
     static const TestType shortOutput{50};
     auto shortRect = Rect(sNegativeRectPositionX, sNegativeRectPositionY, sRectSize, sRectSizeY);
-    CHECK(shortRect.area() == shortOutput);
+    CHECK(static_cast<double>(shortRect.area()) == static_cast<double>(shortOutput));
 }

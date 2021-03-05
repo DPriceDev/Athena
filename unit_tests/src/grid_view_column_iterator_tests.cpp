@@ -67,7 +67,7 @@ TEMPLATE_TEST_CASE("Test grid view column is correctly retrieved.", "[template]"
     static const std::array<TestType, 9> outputArray{ 6, 7, 8, 11, 12, 13, 16, 17, 18 };
     for(int r = 0; r < 3; ++r) {
         for(int c = 0; c < 3; ++c) {
-            CHECK(*testGridView.column(c, r) == outputArray[c + (r * 3)]);
+            CHECK(*testGridView.column(c, r) == outputArray[static_cast<unsigned long>(c + (r * 3))]);
         }
     }
 }

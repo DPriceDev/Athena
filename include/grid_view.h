@@ -140,8 +140,8 @@ namespace ATA {
             using pointer = Type*;
             using reference = Type&;
 
-            Type *operator+(const size_t &offset) const { return mGridPtr + (offset * mWidth); }
-            Type *operator-(const size_t &offset) const { return mGridPtr - (offset * mWidth); }
+            Type *operator+(const size_t &offset) const { return mGridPtr + (offset * static_cast<size_t>(mWidth)); }
+            Type *operator-(const size_t &offset) const { return mGridPtr - (offset * static_cast<size_t>(mWidth)); }
             Type *operator->() { return mGridPtr; }
             Type &operator*() { return *mGridPtr; }
 

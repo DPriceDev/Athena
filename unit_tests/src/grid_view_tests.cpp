@@ -57,7 +57,7 @@ TEMPLATE_TEST_CASE("Test gridview iterator iterates through the array correctly"
     static const auto sGridLength = 25;
     auto it = testGridView.begin();
     for(int i = 0; i < sGridLength; ++i) {
-        CHECK(*it == i);
+        CHECK(static_cast<float>(*it) == static_cast<float>(i));
         ++it;
     }
 
@@ -88,7 +88,7 @@ TEMPLATE_TEST_CASE("Test gridview iterator iterates in reverse through the array
 
     auto it = testGridView.end();
     for(int i = sGridLength - 1; i > -1; --i) {
-        CHECK(*--it == i);
+        CHECK(static_cast<float>(*--it) == static_cast<float>(i));
     }
 
     static const Vector2<int> sGridViewStart{ 1, 1 };
@@ -170,7 +170,7 @@ TEMPLATE_TEST_CASE("Test Grid View Operator() retrieves values correctly", "[tem
     static const std::array<TestType, 9> outputArray{ 6, 7, 8, 11, 12, 13, 16, 17, 18 };
     for(int r = 0; r < 3; ++r) {
         for(int c = 0; c < 3; ++c) {
-            CHECK(testGridView(c, r) == outputArray[c + (r * 3)]);
+            CHECK(testGridView(c, r) == outputArray[static_cast<unsigned long>(c + (r * 3))]);
         }
     }
 }
