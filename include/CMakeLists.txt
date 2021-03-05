@@ -12,5 +12,5 @@ set(INCLUDES
         vector.h)
 
 add_library(athena INTERFACE)
-target_include_directories(athena INTERFACE ${INCLUDES} ../include)
+target_include_directories(athena INTERFACE ../include)
 target_compile_features(athena INTERFACE cxx_std_17)
