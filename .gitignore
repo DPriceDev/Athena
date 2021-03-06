@@ -38,9 +38,9 @@ Makefile
 makefile
 cmake_install.cmake
 install_manifest.txt
-*.cmake
-/cmake-build-debug
+/cmake-build-*
 *.tcl
+CTestTestfile.cmake
 
 # vs code files
 .vscode

@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-include_directories(../include)
+add_library(athena_catch_main STATIC catch_tests_runner.cpp include/catch.hpp)
+target_link_libraries(athena_catch_main PRIVATE athena_project_options)
 
-add_executable(catchTests catch_tests_runner.cpp include/catch.hpp include/athena_function_tests.cpp)
-target_compile_features(Athena INTERFACE cxx_std_17)
-
-include(CTest)
+add_subdirectory(src)
