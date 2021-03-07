@@ -47,9 +47,14 @@ jobs:
     - name: Install conan
       shell: bash
       run: |
-        python3 -m pip install --upgrade pip setuptools
-        python3 -m pip install conan
-        source ~/.profile
+        pip3 install wheel setuptools
+        pip3 install conan --upgrade
+
+    - name: Ubuntu - Fix Conan Path
+      if: startsWith(matrix.os,'ubuntu')
+      run: |
+        sudo update-alternatives --install /usr/bin/conan conan /home/runner/.local/bin/conan 10
+        sudo update-alternatives --config conan
 
     - name: Configure CMake
       run: |
