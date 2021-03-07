@@ -58,7 +58,6 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: |
-          source ~/.profile
           cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
       # build the libraries
