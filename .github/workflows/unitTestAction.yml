@@ -13,10 +13,6 @@ env:
   CONAN_USER_HOME: "${{ github.workspace }}/conan-cache"
   CONAN_USER_HOME_SHORT: "${{ github.workspace }}/conan-cache/short"
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   build:
 
@@ -25,50 +21,47 @@ jobs:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
       fail-fast: false
-    
+
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Cache
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-conan-modules
-      with:
-        path: |
-          ${{ env.CONAN_USER_HOME }}
-          ~/.cache/pip
-        key: ${{ runner.os }}-${{ env.BUILD_TYPE }}-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('cmake/Conan.cmake') }}
+      - name: Cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-conan-modules
+        with:
+          path: |
+            ${{ env.CONAN_USER_HOME }}
+            ~/.cache/pip
+          key: ${{ runner.os }}-${{ env.BUILD_TYPE }}-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('cmake/Conan.cmake') }}
 
-    # setup build directory
-    - name: Create Build Environment
-      run: cmake -E make_directory ./build
+      # setup build directory
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{runner.workspace}}/build
 
       # install conan
-    - name: Install conan
-      shell: bash
-      run: |
-        pip3 install wheel setuptools
-        pip3 install conan --upgrade
+      - name: Install conan
+        shell: bash
+        run: |
+          python3 -m pip install --upgrade pip setuptools
+          python3 -m pip install conan
+          source ~/.profile
 
-    - name: Ubuntu - Fix Conan Path
-      if: startsWith(matrix.os,'ubuntu')
-      run: |
-        sudo update-alternatives --install /usr/bin/conan conan /home/runner/.local/bin/conan 10
-        sudo update-alternatives --config conan
-
-    - name: Configure CMake
-      run: |
-        source ~/.profile
-        cmake -S . -B ./build -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{runner.workspace}}/build
+        run: |
+          source ~/.profile
+          cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
       # build the libraries
-    - name: Build
-      working-directory: ${{runner.workspace}}/build
-      shell: bash
-      run: cmake --build ./build --config $BUILD_TYPE
+      - name: Build
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: cmake --build . --config $BUILD_TYPE
 
-    # Run Tests
-    - name: Test
-      working-directory: ./build
-      shell: bash
-      run: ctest -C $BUILD_TYPE
+      # Run Tests
+      - name: Test
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: ctest -C $BUILD_TYPE
