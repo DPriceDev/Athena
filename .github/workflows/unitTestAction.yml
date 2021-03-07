@@ -45,7 +45,12 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip setuptools
           python3 -m pip install conan
+      if: startsWith(matrix.os,'ubuntu')
+        run: |
           source ~/.profile
+      if: startsWith(matrix.os,'macos')
+        run: |
+          source ~/.bash_profile
 
       - name: Configure CMake
         shell: bash
