@@ -13,6 +13,10 @@ env:
   CONAN_USER_HOME: "${{ github.workspace }}/conan-cache"
   CONAN_USER_HOME_SHORT: "${{ github.workspace }}/conan-cache/short"
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
 
@@ -20,6 +24,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
+      fail-fast: false
     
     steps:
     - uses: actions/checkout@v2
@@ -36,9 +41,9 @@ jobs:
 
     # setup build directory
     - name: Create Build Environment
-      run: cmake -E make_directory ${{runner.workspace}}/build
+      run: cmake -E make_directory ./build
 
-    # install conan
+      # install conan
     - name: Install conan
       shell: bash
       run: |
@@ -47,20 +52,18 @@ jobs:
         source ~/.profile
 
     - name: Configure CMake
-      shell: bash
-      working-directory: ${{runner.workspace}}/build
       run: |
         source ~/.profile
-        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        cmake -S . -B ./build -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
-    # build the libraries
+      # build the libraries
     - name: Build
       working-directory: ${{runner.workspace}}/build
       shell: bash
-      run: cmake --build . --config $BUILD_TYPE
+      run: cmake --build ./build --config $BUILD_TYPE
 
     # Run Tests
     - name: Test
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ./build
       shell: bash
       run: ctest -C $BUILD_TYPE
