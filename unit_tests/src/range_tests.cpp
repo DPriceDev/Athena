@@ -3,8 +3,8 @@
 //
 
 #include <array>
+#include <catch2/catch.hpp>
 
-#include "catch.hpp"
 #include "range.h"
 
 TEMPLATE_TEST_CASE("Test value falls in range", "[template]", int, float, double, long) {

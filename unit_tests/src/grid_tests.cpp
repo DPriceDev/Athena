@@ -2,8 +2,7 @@
 // Created by David Price on 28/05/2020.
 //
 
-#include "catch.hpp"
-
+#include <catch2/catch.hpp>
 #include <numeric>
 
 #include "grid.h"

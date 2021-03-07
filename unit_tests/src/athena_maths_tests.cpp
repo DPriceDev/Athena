@@ -2,7 +2,8 @@
 // Created by urban on 10/06/2020.
 //
 
-#include "catch.hpp"
+#include <catch2/catch.hpp>
+
 #include "athena_maths.h"
 #include "vector.h"
 //

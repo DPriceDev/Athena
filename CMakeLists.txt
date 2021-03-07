@@ -4,12 +4,12 @@ project(Athena LANGUAGES CXX VERSION 1.0.0)
 include(cmake/StandardProjectSettings.cmake)
 
 add_library(athena_project_options INTERFACE)
-target_compile_features(athena_project_options INTERFACE cxx_std_17)
+target_compile_features(athena_project_options INTERFACE cxx_std_20)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
     option(ENABLE_BUILD_WITH_TIME_TRACE "Enable -ftime-trace to generate time tracing .json files on clang" OFF)
     if (ENABLE_BUILD_WITH_TIME_TRACE)
-        add_compile_definitions(project_options INTERFACE -ftime-trace)
+        add_compile_definitions(athena_project_options INTERFACE -ftime-trace)
     endif()
 endif()
 
@@ -38,8 +38,21 @@ option(ENABLE_TESTING "Enable Test Builds" ON)
 
 option(ENABLE_PCH "Enable Precompiled Headers" OFF)
 if (ENABLE_PCH)
-    target_precompile_headers(athena_project_options INTERFACE <vector> <utility> <algorithm> <array>)
+    target_precompile_headers(
+            athena_project_options
+            INTERFACE
+            <vector>
+            <utility>
+            <algorithm>
+            <array>)
 endif()
+
+set(CONAN_EXTRA_REQUIRES "")
+set(CONAN_EXTRA_OPTIONS "")
+
+set(CONAN_EXTRA_REQUIRES ${CONAN_EXTRA_REQUIRES})
+include(cmake/Conan.cmake)
+run_conan()
 
 # Add Source CmakeList
 add_subdirectory(include)
