@@ -50,6 +50,7 @@ endif()
 set(CONAN_EXTRA_REQUIRES "")
 set(CONAN_EXTRA_OPTIONS "")
 
+
 set(CONAN_EXTRA_REQUIRES ${CONAN_EXTRA_REQUIRES})
 include(cmake/Conan.cmake)
 run_conan()
@@ -59,12 +60,17 @@ add_subdirectory(include)
 add_library(athena::athena ALIAS athena)
 
 # Enable catch2 Testing
-if(ENABLE_TESTING)
-    enable_testing()
-    message(
-            "Building Unit Tests."
-    )
-    add_subdirectory(unit_tests PRIVATE)
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+    set(ATHENA_ENABLE_TESTING TRUE)
 endif()
 
+if(ATHENA_ENABLE_TESTING)
+    if(ENABLE_TESTING)
+        enable_testing()
+        message(
+                "Building Unit Tests."
+        )
+        add_subdirectory(unit_tests PRIVATE)
+    endif()
 #todo: Add fuzz testing~
+endif()
