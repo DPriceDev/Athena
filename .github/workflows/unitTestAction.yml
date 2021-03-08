@@ -19,7 +19,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            CC:   gcc-10
+            CXX:  g++-10
+          - os: ubuntu-latest
+            CC:   clang
+            CXX:  clang++
+          - os: windows-latest
+          - os: macos-latest
       fail-fast: false
 
     steps:
@@ -38,6 +46,10 @@ jobs:
       # setup build directory
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
+
+      - name: install Ubuntu packages
+        if: startsWith(matrix.os,'ubuntu')
+        run: sudo apt-get update -m && sudo apt-get install gcc-10 g++-10 llvm-10 clang-10
 
       # install conan
       - name: Install conan
@@ -61,6 +73,9 @@ jobs:
         run: |
           source ~/.profile
           cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        env:
+          CC:   ${{matrix.CC}}
+          CXX:  ${{matrix.CXX}}
 
       - name: Configure CMake - Mac/Windows
         if: startsWith(matrix.os,'macos') || startsWith(matrix.os,'windows') 
