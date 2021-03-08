@@ -2,7 +2,7 @@
 // Created by david Price on 19/06/2020.
 //
 
-#include "catch.hpp"
+#include <catch2/catch.hpp>
 
 #include <numeric>
 

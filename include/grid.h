@@ -129,8 +129,8 @@ namespace ATA {
             Type *operator->() { return mGridPtr; }
             Type &operator*() { return *mGridPtr; }
 
-            bool operator==(const column_iterator &other) { return this->mGridPtr == other.mGridPtr; }
-            bool operator!=(const column_iterator &other) { return this->mGridPtr != other.mGridPtr; }
+            bool operator==(const column_iterator &other) const { return this->mGridPtr == other.mGridPtr; }
+            bool operator!=(const column_iterator &other) const { return this->mGridPtr != other.mGridPtr; }
 
             auto operator++() -> column_iterator & {
                 mGridPtr += mWidth;

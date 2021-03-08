@@ -2,7 +2,7 @@
 // Created by David Price on 02/06/2020.
 //
 
-#include "catch.hpp"
+#include <catch2/catch.hpp>
 
 #include "grid.h"
 #include "grid_view.h"
